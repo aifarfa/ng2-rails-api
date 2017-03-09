@@ -7,22 +7,16 @@ class Api::ProductsController < ApplicationController
   def show
     product = Product.find(params[:id])
     render json: product, status: :ok
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { errors: e.message }, status: :not_found
   end
 
   def create
     product = Product.create!(product_params)
     render json: product, status: :created
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { errors: e.message }, status: :unprocessable_entity
   end
 
   def update
     product = Product.find(params[:id])
     product.update(product_params)
-  rescue ActiveRecord::RecordNotFound => e
-    render json: {errors: e.message}, status: :not_found
   end
 
   protected

@@ -115,7 +115,7 @@ RSpec.describe 'Products API', type: :request do
       end
 
       it 'updates with valid_attributes' do
-        expect(json['errors']).to match(/Couldn't find/)
+        expect(response.body).to match(/Couldn't find/)
       end
     end
   end
