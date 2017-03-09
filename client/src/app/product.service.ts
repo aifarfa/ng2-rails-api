@@ -7,8 +7,8 @@ export class ProductService {
 
   getProducts(): Promise<any[]> {
     const SAMPLE = [
-      { name: 'Foo', available: 200 },
-      { name: 'Bar', available: 100 }
+      { id: 1, name: 'Foo', available: 200 },
+      { id: 2, name: 'Bar', available: 100 }
     ];
     return new Promise((resolve, reject) => {
       setTimeout(() => resolve(SAMPLE), 500);

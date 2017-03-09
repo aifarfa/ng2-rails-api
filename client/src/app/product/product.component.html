@@ -4,7 +4,9 @@
       product list:
     </p>
     <ul>
-      <li *ngFor="let item of products">{{item.name}} ({{item.available}})</li>
+      <li *ngFor="let item of products">
+        <a routerLink="products/{{item.id}}">{{item.name}}</a> ({{item.available}})
+      </li>
     </ul>
   </div>
 </div>
