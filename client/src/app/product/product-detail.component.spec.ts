@@ -9,16 +9,19 @@ describe('ProductDetailComponent', () => {
 
   beforeEach(async(() => {
     const routes = {
-      params: { id: 1 }
+      params: {
+        subscribe: (callback) => callback({ id: 100 })
+      }
     };
 
-    TestBed.configureTestingModule({
-      declarations: [ ProductDetailComponent ],
-      providers: [ ProductService,
-        { provide: ActivatedRoute, useValue: routes }
-      ]
-    })
-    .compileComponents();
+    TestBed
+      .configureTestingModule({
+        declarations: [ProductDetailComponent],
+        providers: [ProductService,
+          { provide: ActivatedRoute, useValue: routes }
+        ]
+      })
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -32,6 +35,6 @@ describe('ProductDetailComponent', () => {
   });
 
   it('should parse params["id"]', () => {
-    expect(component.productId).toEqual(1);
+    expect(component.productId).toEqual(100);
   })
 });
