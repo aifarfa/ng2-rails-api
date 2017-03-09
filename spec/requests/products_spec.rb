@@ -10,7 +10,6 @@ RSpec.describe 'Products API', type: :request do
     before { get '/api/products' }
 
     it 'returns products' do
-      json = JSON.parse(response.body)
       expect(json).not_to be_empty
       expect(json.size).to eq(10)
     end
@@ -25,7 +24,6 @@ RSpec.describe 'Products API', type: :request do
 
     context 'when the record exists' do
       it 'returns the product' do
-        json = JSON.parse(response.body)
         expect(json).not_to be_empty
         expect(json['id']).to eq(product_id)
       end
@@ -56,7 +54,6 @@ RSpec.describe 'Products API', type: :request do
       before { post '/api/products', params: valid_attributes }
 
       it 'creates a product' do
-        json = JSON.parse(response.body)
         expect(json['name']).to eq('Smart')
         expect(json['available']).to eq(0)
         expect(json['active']).to be_truthy
@@ -83,10 +80,8 @@ RSpec.describe 'Products API', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(response.body)
-          .to match(/Validation failed/)
+        expect(response.body).to match(/Validation failed/)
       end
     end
   end
-
 end
