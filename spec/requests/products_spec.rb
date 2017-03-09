@@ -86,7 +86,7 @@ RSpec.describe 'Products API', type: :request do
   end
 
   describe 'PUT /api/products/:id' do
-    let(:valid_attributes) { { name: 'New Smart' } }
+    let(:valid_attributes) { { name: 'New Smart', sku: 'foo-bar', active: false } }
 
     context 'when the record exists' do
       before do
@@ -102,6 +102,8 @@ RSpec.describe 'Products API', type: :request do
       it 'updates with valid_attributes' do
         @product.reload
         expect(@product['name']).to eq('New Smart')
+        expect(@product['sku']).to eq('foo-bar')
+        expect(@product['active']).to be_falsy
       end
     end
 

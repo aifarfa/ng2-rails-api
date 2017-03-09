@@ -28,6 +28,6 @@ class Api::ProductsController < ApplicationController
   protected
 
   def product_params
-    params.permit(:name, :sku, :available)
+    params.permit(:name, :sku, :available, :active)
   end
 end
