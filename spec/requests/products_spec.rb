@@ -89,11 +89,31 @@ RSpec.describe 'Products API', type: :request do
     let(:valid_attributes) { { name: 'New Smart' } }
 
     context 'when the record exists' do
-      before { put "/api/products/#{product_id}", params: valid_attributes }
+      before do
+        @product = products.first
+        put "/api/products/#{@product.id}", params: valid_attributes
+      end
 
       it 'returns status code 204' do
         expect(response).to have_http_status(204)
         expect(response.body).to be_empty
+      end
+
+      it 'updates with valid_attributes' do
+        @product.reload
+        expect(@product['name']).to eq('New Smart')
+      end
+    end
+
+    context 'when the record not exists' do
+      before { put '/api/products/0', params: valid_attributes }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'updates with valid_attributes' do
+        expect(json['errors']).to match(/Couldn't find/)
       end
     end
   end

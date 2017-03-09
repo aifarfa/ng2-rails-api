@@ -21,6 +21,8 @@ class Api::ProductsController < ApplicationController
   def update
     product = Product.find(params[:id])
     product.update(product_params)
+  rescue ActiveRecord::RecordNotFound => e
+    render json: {errors: e.message}, status: :not_found
   end
 
   protected
