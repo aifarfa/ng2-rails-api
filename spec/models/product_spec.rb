@@ -5,14 +5,20 @@ RSpec.describe Product, type: :model do
   it { should validate_presence_of(:sku) }
 
   describe 'default attributes' do
-    before { @product = FactoryGirl.build(:product) }
+    before do
+      @product = Product.create(name: 'Foo', sku: 'Bar')
+    end
+
     subject { @product }
 
     it { should be_valid }
 
-    it 'has default avalable value' do
-      expect(@product.available).to_not be_nil
+    it 'has set default active' do
+      expect(@product.active).to be_truthy
+    end
+
+    it 'has set default available: 0' do
+      expect(@product.available).to eq(0)
     end
   end
-
 end

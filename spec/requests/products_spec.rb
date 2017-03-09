@@ -58,6 +58,8 @@ RSpec.describe 'Products API', type: :request do
       it 'creates a product' do
         json = JSON.parse(response.body)
         expect(json['name']).to eq('Smart')
+        expect(json['available']).to eq(0)
+        expect(json['active']).to be_truthy
       end
 
       it 'save new record' do
