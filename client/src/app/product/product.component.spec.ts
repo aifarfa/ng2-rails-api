@@ -22,4 +22,9 @@ describe('ProductComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have products', () => {
+    expect(component.products).not.toBeNull()
+  });
+
 });
