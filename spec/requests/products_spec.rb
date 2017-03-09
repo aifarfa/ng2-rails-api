@@ -84,4 +84,17 @@ RSpec.describe 'Products API', type: :request do
       end
     end
   end
+
+  describe 'PUT /api/products/:id' do
+    let(:valid_attributes) { { name: 'New Smart' } }
+
+    context 'when the record exists' do
+      before { put "/api/products/#{product_id}", params: valid_attributes }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+        expect(response.body).to be_empty
+      end
+    end
+  end
 end

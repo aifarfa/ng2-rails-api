@@ -18,6 +18,11 @@ class Api::ProductsController < ApplicationController
     render json: { errors: e.message }, status: :unprocessable_entity
   end
 
+  def update
+    product = Product.find(params[:id])
+    product.update(product_params)
+  end
+
   protected
 
   def product_params
