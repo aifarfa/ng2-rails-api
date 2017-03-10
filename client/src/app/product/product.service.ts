@@ -16,7 +16,11 @@ export class ProductService {
   }
 
   getProduct(id: number): Promise<any> {
-    return Promise.resolve({});
+    const url = `/products/${id}`;
+    console.log('getProduct called with', url)
+    return this.http.get(url)
+      .toPromise()
+      .then(response => response.json())
   }
 
   private handleError(error: any): Promise<any> {

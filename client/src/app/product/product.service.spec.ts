@@ -1,49 +1,73 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { fakeAsync, TestBed, inject } from '@angular/core/testing';
 import {
   HttpModule,
   Http,
   Response,
   ResponseOptions,
-  XHRBackend
 } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
-
 import { ProductService } from './product.service';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/observable/of';
 
 describe('ProductService', () => {
+  let mockHttp: Http;
+  // let service: ProductService;
+
   beforeEach(() => {
+    const httpStub = { get: null } as Http;
+
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
-        { provide: XHRBackend, useClass: MockBackend },
+        { provide: Http, useValue: httpStub },
         ProductService
       ]
     });
   });
 
-  describe('getProducts', () => {
-    beforeEach(inject([ProductService, XHRBackend], (service: ProductService, mockBackend) => {
-      this.service = service;
-      mockBackend.connections.subscribe((connection) => {
-        connection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify({id: 1, name: 'Foo', available: 100})
-        })));
-      });
-    }))
+  beforeEach(inject([ProductService], (service: ProductService) => {
+    this.service = service;
+    mockHttp = TestBed.get(Http);
+  }))
 
-    it('returns Promise', () => {
-      let result = this.service.getProducts();
-      expect(result.then).toBeDefined();
+  describe('getProducts', () => {
+    const mockResponse = [
+      { id: 1, name: 'Foo', available: 100 },
+      { id: 2, name: 'Bar', available: 0 },
+    ];
+
+    beforeEach(() => {
+      spyOn(mockHttp, 'get').and.returnValue(Observable.of({
+        json: () => mockResponse
+      }));
     })
 
-    it('resolves array', (done) => {
+    it('resolves with given response', fakeAsync(() => {
       this.service.getProducts()
         .then(result => {
-          // console.log('getProducts done..')
-          expect(result).toBeTruthy();
-          done();
-        })
-        .catch(done);
-    })
+          expect(mockHttp.get).toHaveBeenCalledWith('/products')
+          expect(result).toEqual(mockResponse);
+        });
+    }))
   })
+
+  describe('getProduct(id)', () => {
+    const mockResponse = { id: 1, name: 'Foo', available: 100 }
+
+    beforeEach(() => {
+      spyOn(mockHttp, 'get').and.returnValue(Observable.of({
+        json: () => mockResponse
+      }));
+    })
+
+    it('resolves with given response', fakeAsync(() => {
+      this.service.getProduct(100)
+        .then(result => {
+          expect(mockHttp.get).toHaveBeenCalledWith('/products/100')
+          expect(result).toEqual(mockResponse);
+        });
+    }))
+  })
+
 });
