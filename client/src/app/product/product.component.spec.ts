@@ -7,8 +7,11 @@ import { ProductService } from '../product.service';
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
+  let service: ProductService;
 
-  const mockService = new ProductService(null) // todo override service
+  const serviceStub = {
+    getProducts: null
+  }
   const products = [
     { id: 1, name: 'Awesome', available: 100 },
     { id: 2, name: 'Foo', available: 100 },
@@ -21,15 +24,15 @@ describe('ProductComponent', () => {
         declarations: [ProductComponent],
         imports: [RouterModule],
         providers: [
-          { provide: ProductService, useValue: mockService }
+          { provide: ProductService, useValue: serviceStub }
         ]
       })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    // before createComponent
-    spyOn(mockService, 'getProducts').and.returnValue(Promise.resolve(products));
+    service = TestBed.get(ProductService); // cloned stub
+    spyOn(service, 'getProducts').and.returnValue(Promise.resolve(products));
   });
 
   describe('OnInit', () => {
@@ -40,7 +43,7 @@ describe('ProductComponent', () => {
     }));
 
     it('should calls getProducts', () => {
-      expect(mockService.getProducts).toHaveBeenCalled();
+      expect(service.getProducts).toHaveBeenCalled();
     });
 
     it('should set products', () => {
