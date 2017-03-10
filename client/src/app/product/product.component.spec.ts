@@ -4,10 +4,14 @@ import { RouterModule } from '@angular/router';
 import { ProductComponent } from './product.component';
 import { ProductService } from '../product.service';
 
+// for override service
+class MockProductService extends ProductService {}
+
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
-  let service = new ProductService();
+
+  const mockService = new MockProductService()
 
   beforeEach(async(() => {
     TestBed
@@ -15,7 +19,7 @@ describe('ProductComponent', () => {
         declarations: [ProductComponent],
         imports: [RouterModule],
         providers: [
-          { provide: ProductService, useValue: service }
+          { provide: ProductService, useValue: mockService }
         ]
       })
       .compileComponents();
@@ -39,12 +43,12 @@ describe('ProductComponent', () => {
     ]
 
     beforeEach(async(() => { // await ngOnInit
-      spyOn(service, 'getProducts').and.callFake(() => Promise.resolve(products));
+      spyOn(mockService, 'getProducts').and.callFake(() => Promise.resolve(products));
       component.ngOnInit();
     }));
 
     it('should calls getProducts', () => {
-      expect(service.getProducts).toHaveBeenCalled();
+      expect(mockService.getProducts).toHaveBeenCalled();
     });
 
     it('should set products', () => {
