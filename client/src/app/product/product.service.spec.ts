@@ -46,7 +46,7 @@ describe('ProductService', () => {
     it('resolves with given response', fakeAsync(() => {
       this.service.getProducts()
         .then(result => {
-          expect(mockHttp.get).toHaveBeenCalledWith('/products')
+          expect(mockHttp.get).toHaveBeenCalledWith('/api/products')
           expect(result).toEqual(mockResponse);
         });
     }))
@@ -64,7 +64,7 @@ describe('ProductService', () => {
     it('resolves with given response', fakeAsync(() => {
       this.service.getProduct(100)
         .then(result => {
-          expect(mockHttp.get).toHaveBeenCalledWith('/products/100')
+          expect(mockHttp.get).toHaveBeenCalledWith('/api/products/100')
           expect(result).toEqual(mockResponse);
         });
     }))

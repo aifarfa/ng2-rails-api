@@ -9,14 +9,14 @@ export class ProductService {
   constructor(private http: Http) { }
 
   getProducts(): Promise<any[]> {
-    return this.http.get('/products')
+    return this.http.get('/api/products')
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);
   }
 
   getProduct(id: number): Promise<any> {
-    const url = `/products/${id}`;
+    const url = `/api/products/${id}`;
     console.log('getProduct called with', url)
     return this.http.get(url)
       .toPromise()
