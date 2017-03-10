@@ -7,14 +7,18 @@ import { ProductService } from '../product.service';
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
+  let service = new ProductService();
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ProductComponent ],
-      imports: [RouterModule],
-      providers: [ ProductService ]
-    })
-    .compileComponents();
+    TestBed
+      .configureTestingModule({
+        declarations: [ProductComponent],
+        imports: [RouterModule],
+        providers: [
+          { provide: ProductService, useValue: service }
+        ]
+      })
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -23,12 +27,31 @@ describe('ProductComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should have products', () => {
+  it('should have empty products', () => {
     expect(component.products).not.toBeNull()
   });
+
+  describe('OnInit', () => {
+    const products = [
+      { id: 1, name: 'Awesome', available: 100 },
+      { id: 2, name: 'Foo', available: 100 },
+      { id: 3, name: 'Bar', available: 200 },
+    ]
+
+    beforeEach(async(() => { // await ngOnInit
+      spyOn(service, 'getProducts').and.callFake(() => Promise.resolve(products));
+      component.ngOnInit();
+    }));
+
+    it('should calls getProducts', () => {
+      expect(service.getProducts).toHaveBeenCalled();
+    });
+
+    it('should set products', () => {
+      expect(component.products.length).toEqual(3);
+      expect(component.products[0].name).toEqual('Awesome');
+    });
+
+  })
 
 });
