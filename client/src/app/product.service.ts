@@ -10,8 +10,10 @@ export class ProductService {
       { id: 1, name: 'Foo', available: 200 },
       { id: 2, name: 'Bar', available: 100 }
     ];
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(SAMPLE), 500);
-    })
+    return Promise.resolve(SAMPLE);
+  }
+
+  getProduct(id: number): Promise<any> {
+    return Promise.resolve({});
   }
 }

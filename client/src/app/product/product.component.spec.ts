@@ -43,7 +43,7 @@ describe('ProductComponent', () => {
     ]
 
     beforeEach(async(() => { // await ngOnInit
-      spyOn(mockService, 'getProducts').and.callFake(() => Promise.resolve(products));
+      spyOn(mockService, 'getProducts').and.returnValue(Promise.resolve(products));
       component.ngOnInit();
     }));
 
