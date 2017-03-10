@@ -9,6 +9,7 @@ import { ProductService } from './product.service';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 describe('ProductService', () => {
   let mockHttp: Http;
@@ -37,18 +38,30 @@ describe('ProductService', () => {
       { id: 2, name: 'Bar', available: 0 },
     ];
 
+    let spy: jasmine.Spy;
+
     beforeEach(() => {
-      spyOn(mockHttp, 'get').and.returnValue(Observable.of({
+      spy = spyOn(mockHttp, 'get');
+      spy.and.returnValue(Observable.of({
         json: () => mockResponse
-      }));
+      }))
     })
 
     it('resolves with given response', fakeAsync(() => {
       this.service.getProducts()
         .then(result => {
           expect(mockHttp.get).toHaveBeenCalledWith('/api/products')
-          expect(result).toEqual(mockResponse);
-        });
+          expect(result).toEqual(mockResponse)
+        })
+    }))
+
+    it('reject with errors', fakeAsync(() => {
+      spy.and.returnValue(Observable.throw('NONO'))
+      this.service.getProducts()
+        .catch((error: any) => {
+          expect(mockHttp.get).toHaveBeenCalledWith('/api/products')
+          expect(error).toEqual('NONO')
+        })
     }))
   })
 
@@ -56,9 +69,10 @@ describe('ProductService', () => {
     const mockResponse = { id: 1, name: 'Foo', available: 100 }
 
     beforeEach(() => {
-      spyOn(mockHttp, 'get').and.returnValue(Observable.of({
+      this.spy = spyOn(mockHttp, 'get')
+      this.spy.and.returnValue(Observable.of({
         json: () => mockResponse
-      }));
+      }))
     })
 
     it('resolves with given response', fakeAsync(() => {
@@ -67,6 +81,15 @@ describe('ProductService', () => {
           expect(mockHttp.get).toHaveBeenCalledWith('/api/products/100')
           expect(result).toEqual(mockResponse);
         });
+    }))
+
+    it('reject with errors', fakeAsync(() => {
+      this.spy.and.returnValue(Observable.throw('NONO'))
+      this.service.getProduct(1)
+        .catch((error: any) => {
+          expect(mockHttp.get).toHaveBeenCalledWith('/api/products/1')
+          expect(error).toEqual('NONO')
+        })
     }))
   })
 
