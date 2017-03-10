@@ -4,14 +4,16 @@ import { RouterModule } from '@angular/router';
 import { ProductComponent } from './product.component';
 import { ProductService } from '../product.service';
 
-// for override service
-class MockProductService extends ProductService {}
-
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
 
-  const mockService = new MockProductService()
+  const mockService = new ProductService(null) // todo override service
+  const products = [
+    { id: 1, name: 'Awesome', available: 100 },
+    { id: 2, name: 'Foo', available: 100 },
+    { id: 3, name: 'Bar', available: 200 },
+  ]
 
   beforeEach(async(() => {
     TestBed
@@ -26,25 +28,15 @@ describe('ProductComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should have empty products', () => {
-    expect(component.products).not.toBeNull()
+    // before createComponent
+    spyOn(mockService, 'getProducts').and.returnValue(Promise.resolve(products));
   });
 
   describe('OnInit', () => {
-    const products = [
-      { id: 1, name: 'Awesome', available: 100 },
-      { id: 2, name: 'Foo', available: 100 },
-      { id: 3, name: 'Bar', available: 200 },
-    ]
-
     beforeEach(async(() => { // await ngOnInit
-      spyOn(mockService, 'getProducts').and.returnValue(Promise.resolve(products));
-      component.ngOnInit();
+      fixture = TestBed.createComponent(ProductComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
     }));
 
     it('should calls getProducts', () => {

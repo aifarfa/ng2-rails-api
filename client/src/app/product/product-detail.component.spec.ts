@@ -7,7 +7,8 @@ describe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;
   let fixture: ComponentFixture<ProductDetailComponent>;
 
-  const mockService = new ProductService() // todo override service
+  const mockService = new ProductService(null) // todo override service
+  const product = { id: 100, name: 'Foo', available: 500 }
   const routes = {
     params: {
       subscribe: (callback) => callback({ id: 100 })
@@ -15,7 +16,6 @@ describe('ProductDetailComponent', () => {
   };
 
   beforeEach(async(() => {
-
     TestBed
       .configureTestingModule({
         declarations: [ProductDetailComponent],
@@ -28,26 +28,20 @@ describe('ProductDetailComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductDetailComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spyOn(mockService, 'getProduct').and.returnValue(Promise.resolve(product));
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should parse params["id"]', () => {
-    expect(component.productId).toEqual(100);
-  })
 
   describe('OnInit', () => {
-    const product = { id: 100, name: 'Foo', available: 500 }
 
     beforeEach(async(() => {
-      spyOn(mockService, 'getProduct').and.returnValue(Promise.resolve(product));
-      component.ngOnInit();
+      fixture = TestBed.createComponent(ProductDetailComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
     }))
+
+    it('should parse params["id"]', () => {
+      expect(component.productId).toEqual(100);
+    })
 
     it('should calls getProduct with id: 100', () => {
       expect(mockService.getProduct).toHaveBeenCalledWith(100);
