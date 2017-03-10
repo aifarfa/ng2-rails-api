@@ -1,7 +1,7 @@
 import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ProductDetailComponent } from './product-detail.component';
-import { ProductService } from '../product.service';
+import { ProductService } from './product.service';
 
 describe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;

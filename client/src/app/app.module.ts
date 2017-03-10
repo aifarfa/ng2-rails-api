@@ -7,7 +7,7 @@ import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';
 import { ProductComponent } from './product/product.component';
 import { ProductDetailComponent } from './product/product-detail.component';
-import { ProductService } from './product.service';
+import { ProductService } from './product/product.service';
 
 @NgModule({
   declarations: [
