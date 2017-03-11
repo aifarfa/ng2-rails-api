@@ -12,8 +12,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
 describe('ProductService', () => {
+  const endpoint = 'http://localhost:3000';
   let mockHttp: Http;
-  // let service: ProductService;
 
   beforeEach(() => {
     const httpStub = { get: null } as Http;
@@ -50,7 +50,7 @@ describe('ProductService', () => {
     it('resolves with given response', fakeAsync(() => {
       this.service.getProducts()
         .then(result => {
-          expect(mockHttp.get).toHaveBeenCalledWith('/api/products')
+          expect(mockHttp.get).toHaveBeenCalledWith(`${endpoint}/api/products`)
           expect(result).toEqual(mockResponse)
         })
     }))
@@ -59,7 +59,6 @@ describe('ProductService', () => {
       spy.and.returnValue(Observable.throw('NONO'))
       this.service.getProducts()
         .catch((error: any) => {
-          expect(mockHttp.get).toHaveBeenCalledWith('/api/products')
           expect(error).toEqual('NONO')
         })
     }))
@@ -78,7 +77,7 @@ describe('ProductService', () => {
     it('resolves with given response', fakeAsync(() => {
       this.service.getProduct(100)
         .then(result => {
-          expect(mockHttp.get).toHaveBeenCalledWith('/api/products/100')
+          expect(mockHttp.get).toHaveBeenCalledWith(`${endpoint}/api/products/100`)
           expect(result).toEqual(mockResponse);
         });
     }))
@@ -87,7 +86,7 @@ describe('ProductService', () => {
       this.spy.and.returnValue(Observable.throw('NONO'))
       this.service.getProduct(1)
         .catch((error: any) => {
-          expect(mockHttp.get).toHaveBeenCalledWith('/api/products/1')
+          expect(mockHttp.get).toHaveBeenCalledWith(`${endpoint}/api/products/1`)
           expect(error).toEqual('NONO')
         })
     }))
