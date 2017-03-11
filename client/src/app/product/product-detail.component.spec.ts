@@ -1,5 +1,6 @@
 import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ProductDetailComponent } from './product-detail.component';
 import { ProductService } from './product.service';
 import { Subject } from 'rxjs/Subject';
@@ -16,6 +17,7 @@ describe('ProductDetailComponent', () => {
     TestBed
       .configureTestingModule({
         declarations: [ProductDetailComponent],
+        imports: [FormsModule],
         providers: [
           { provide: ProductService, useValue: { getProduct: spy } },
           { provide: ActivatedRoute, useValue: { params } }

@@ -1,6 +1,53 @@
 <div class="row">
-  <div class="col-md-12">
-    <p> product details</p>
-    <p> ID: {{productId}}</p>
+  <div class="col-md-6">
+    <h3 class="col-sm-offset-2 col-sm-10"> product details</h3>
+    <div class="form-horizontal" *ngIf="product" role="form">
+      <div class="form-group">
+        <label class="col-sm-4 control-label">ID</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">
+            <strong>{{product.id}}</strong>
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-4 control-label">SKU</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">{{product.sku}}</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-4 control-label">Updated</label>
+        <div class="col-sm-8">
+          <p class="form-control-static text-info">{{product.updated_at | date: 'dd/MM/yyyy'}}</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="name" class="col-sm-4 control-label">Name</label>
+        <div class="col-sm-8">
+          <input class="form-control" [(ngModel)]="product.name" name="name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="available" class="col-sm-4 control-label">Available</label>
+        <div class="col-sm-8">
+          <input class="form-control" [(ngModel)]="product.available" name="available" type="number" />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+          <div class="checkbox">
+            <label>
+                <input type="checkbox" [(ngModel)]="product.active"> Active
+              </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+          <button type="button" class="btn btn-primary">Save</button>
+          <a role="button" class="btn btn-default" routerLink="/products">Back</a>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
