@@ -2,5 +2,5 @@ export const environment = {
   production: true,
 
   envName: 'prod',
-  endpoint: ''
+  endpoint: 'https://radiant-bastion-65592.herokuapp.com'
 };
