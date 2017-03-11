@@ -1,57 +1,57 @@
 import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ProductDetailComponent } from './product-detail.component';
 import { ProductService } from './product.service';
+import { Subject } from 'rxjs/Subject';
 
 describe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;
   let fixture: ComponentFixture<ProductDetailComponent>;
-  let service: ProductService;
 
-  const product = { id: 100, name: 'Foo', available: 500 }
-  const routes = {
-    params: {
-      subscribe: (callback) => callback({ id: 100 })
-    }
-  };
-  const serviceStub = {
-    getProduct: null
-  }
+  const params = new Subject<Params>();
+  const product = { id: 100, name: 'Foo', available: 500 };
+  const spy = jasmine.createSpy('getProduct');
 
   beforeEach(async(() => {
     TestBed
       .configureTestingModule({
         declarations: [ProductDetailComponent],
         providers: [
-          { provide: ProductService, useValue: serviceStub },
-          { provide: ActivatedRoute, useValue: routes }
+          { provide: ProductService, useValue: { getProduct: spy } },
+          { provide: ActivatedRoute, useValue: { params } }
         ]
       })
       .compileComponents();
-  }));
+  }))
 
   beforeEach(() => {
-    service = TestBed.get(ProductService);
-    spyOn(service, 'getProduct').and.returnValue(Promise.resolve(product));
+    fixture = TestBed.createComponent(ProductDetailComponent);
+    fixture.detectChanges();
+    component = fixture.componentInstance;
   })
 
-  describe('OnInit', () => {
-    beforeEach(async(() => { // await ngOnInit to be done
-      fixture = TestBed.createComponent(ProductDetailComponent);
-      fixture.detectChanges();
-      component = fixture.componentInstance;
-    }));
+  describe('when route params change', () => {
+    beforeEach(async(() => { // await subscribe callback done
+      spy.and.returnValue(Promise.resolve(product));
+      params.next({ id: 100 })
+    }))
 
-    it('should parse params["id"]', () => {
+    it('set productId', () => {
       expect(component.productId).toEqual(100);
     })
 
-    it('should calls getProduct with id: 100', () => {
-      expect(service.getProduct).toHaveBeenCalledWith(100);
+    it('calls getProduct with productId', () => {
+      expect(spy).toHaveBeenCalledWith(100);
     })
 
     it('set current product details', () => {
       expect(component.product).toEqual(product);
     })
+
+    it('update productId', fakeAsync(() => {
+      params.next({ 'id': 99 });
+      expect(spy).toHaveBeenCalledWith(99);
+    }))
+
   })
 });
