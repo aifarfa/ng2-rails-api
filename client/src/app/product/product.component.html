@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3>
+      product list:
+    </h3>
+    <div *ngIf="products">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>stock Q.ty</th>
+            <th>updated</th>
+            <th>created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of products">
+            <td>{{item.sku}}</td>
+            <td>
+              <a routerLink="/products/{{item.id}}">{{item.name}}</a>
+            </td>
+            <td>{{item.available}}</td>
+            <td>
+              <div class="text-info">{{item.updated_at | date: 'dd MMM hh:mm'}}</div>
+            </td>
+            <td>
+              <div class="">{{item.created_at | date: 'dd MMM hh:mm'}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
